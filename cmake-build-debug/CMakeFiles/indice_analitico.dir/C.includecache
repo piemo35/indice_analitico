@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/pietro/Documents/GITHUB/c/indice_versioni/indice_analitico/header.h
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+ctype.h
+-
+
+/Users/pietro/Documents/GITHUB/c/indice_versioni/indice_analitico/main.c
+header.h
+/Users/pietro/Documents/GITHUB/c/indice_versioni/indice_analitico/header.h
+

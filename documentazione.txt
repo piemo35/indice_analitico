@@ -1,0 +1,150 @@
+Documentazione del progetto "Indice Analitico" scritta da Ahmed Mera & Pietro Piemontese.
+
+
+
+
+SCOPO DEL PROGRAMMA: 
+
+- Creare un indice analitico con un array di teste di liste;
+	(Ogni testa sara' l'inizio di una lista contenente tutte le parole del file che iniziano con quella lettera)
+
+- Leggere le parole scritte all'interno di un file di testo;
+
+C - Creare il nodo contenente PAROLA e PAGINA e inserirlo in modo ordinato nella lista corretta;
+R - Visualizzare tutto l'indice;
+U - Inserire una nuova parola;
+D - Cancellare parola;
+
+
+
+
+STRUTTURA DEL NODO:
+
+struct nodo {
+    char parola[MAXSIZE];   //parola letta dal file
+    int pagina;		//pagina in cui si trova la parola
+    struct nodo * next;		//puntatore al nodo successivo
+};
+
+
+
+
+FUNZIONI:
+
+1) int h(int parola){ return parola-65; }
+
+	-Questa funzione mi consente di sapere in quale posizione dell'array di teste si trovera' la lista in cui devo inserire la parola;
+
+	-Parametro (per valore): la prima lettera della parola sottoforma di intero, la chiamata della funzione sara' pos = h(toupper(parola[0])); (il param. e' intero perche toupper() restituisce un intero);
+
+	-Ogni lettera in codice ASCII corrispone ad un intero, le maiuscole iniziano dal 65(A), quindi se io per esempio gli passo la lettera C la funzione fara [C - 65] quindi [67-65] = 2 che sara' la posizione nell'array della testa contenete la lista dele parole che iniziano con la C;
+
+--------------------------------------------------------------------------------
+
+2) void inizializzaTeste(NODO * arr){
+	int i;
+    for (i=0; i<26; i++)  *(arr+i) = NULL;	}
+
+	-Questa funzione viene chiamata prima della lettura da file e serve ad inizializzare a NULL tutte le teste dell'array (che poi conterranno altri nodi);
+
+	-Il parametro (per rif) e' un puntatore all'array di teste
+
+--------------------------------------------------------------------------------
+
+3) void ordina(NODO * teste , NODO nuovo);
+
+	-Questa funzione serve ad inserire in modo ordinato il nuovo nodo nella lista corretta;
+
+	-Primo parametro (rif): puntatore alle teste;
+	-Secondo parametro (rif perche e' una struttura): il nuovo nodo da inserire in lista;
+
+	-L'algoritmo di ordinamento e' composto da if in cascata e la spiegazione di ogni variabile e di ogni istruzione di trova nel corpo della funzione stessa;
+
+--------------------------------------------------------------------------------
+
+4) void creaNodo(NODO * testa , char parola [], int pagina );
+
+    -Questa funzione crea il nuovo nodo passandogli la parola e la pagina, successivamente chiama la funzione di ordinamento per concatenare il nodo alla lista giusta.
+
+    -Primo parametro (rif.): puntatore alla testa della lista in cui si trova l'iniziale della parola, la chiamata sara':
+
+    	creaNodo((testa + h(parola[0])), parola, pagina);
+
+    	notare la chiamata della funzione h() (n.1) nel primo parametro
+    	che mi fa arrivare direttamente alla testa della lista corretta.
+
+    -Secondo parametro (per rif.): array di caratteri che contiene la parola da inserire nel nodo.
+    -Terzo parametro (per val.): intero che contiene la pagina in cui e' presente la parola.
+
+--------------------------------------------------------------------------------
+
+5) void leggiFile(NODO *testa);
+
+	Fasi di questa funzione:
+
+	- apre il file di testo in "r",
+	ciclo do-while 
+		- legge ogni parola
+		- chiama la funzione h(); (n.1) per sapere in che posizione inserirla
+		- chiama la funzione creaNodo(); (n.4) per creare il nodo ed inserirlo in lista
+		- quando trova la EOF esce dal ciclo;
+
+
+	Parametro (per rif): puntatore all'array di teste. 
+
+--------------------------------------------------------------------------------
+
+6) void visualizza (NODO * teste);
+
+	-Questa funzione dichiara un puntatore temporaneo di scorrimento della lista e stampa a video ogni lista presente nell'array, se la lista e' vuota stampa solo la lettera che dovrebb contenere quella lista.
+
+	-Parametro (per rif): puntatore all'array di teste.
+
+--------------------------------------------------------------------------------
+
+7) void inserisciParola();
+
+	-Questa funzione chiede all'utente la parola da inserire, apre il file in "a", e scrive la parola con fprintf, finito cio' chiede all'utente se vuole inserire altre parole o se uscire.
+
+	-Nessun parametro.
+
+--------------------------------------------------------------------------------
+
+8) int cancellaDaFile(char parola[]);
+
+	Fasi della funzione:
+		-Apre il file "data.txt" in "r"
+		-Apre il file "copia.txt" in "w"
+		ciclo do-while
+			-Legge una parola da "data.txt"
+				-Se trova la EOF esce dal ciclo
+			-La confronta con la parola passata come parametro
+				-Se e' uguale non fa niente
+				-Se e' diversa la scrive sul file "copia.txt"
+		-Elimina il vecchio file "data.txt"
+		-Rinomina il file "copia.txt" in "data.txt"
+
+	Parametro (per rif): la stringa contenente la parola da eliminare.
+
+--------------------------------------------------------------------------------
+
+9) int cancella(NODO * teste);
+
+	Fasi della funzione:
+		-Chiede all'utente la parola da cancellare.
+		-Chiama la funzione cancellaDaFile(); (n.8)
+		-Scorre la lista finche non trova la parola cercata ed elimina il suo nodo
+
+	-Restituisce 1 se la parola e' stata cancellata.
+	-Restituisce 0 se non e' stata trovata.
+
+--------------------------------------------------------------------------------
+
+10) void ricerca(NODO * teste);
+
+	-Questa funzione ricerca nella lista il nodo contenente la parola cercatadall'utente e, se la trova, stampa a video la parola e la pagina.
+	-Se non la trova stampa un messaggio di errore.
+
+	Parametro (per rif): puntatore all'array di teste.
+
+--------------------------------------------------------------------------------
